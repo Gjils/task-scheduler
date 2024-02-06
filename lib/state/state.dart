@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:task_scheduler/themes/themes.dart';
 import 'package:task_scheduler/features/task/task.dart';
 
 class AppState extends ChangeNotifier {
-  var theme = darkColorScheme;
+  var themeIsDark = true;
+
+  void setTheme(bool isDark) {
+    themeIsDark = isDark;
+    notifyListeners();
+  }
 
   var _realTasks = <TaskReal>[];
 

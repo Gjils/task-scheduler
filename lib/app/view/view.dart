@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 
 import 'package:task_scheduler/pages/schedule_page/schedule_page.dart';
 import 'package:task_scheduler/pages/templates_page/templates_page.dart';
+import 'package:task_scheduler/pages/settings_page/settings_page.dart';
 import 'package:task_scheduler/features/navigation_bar/navigation_bar.dart';
-
-import '../../state/state.dart';
+import 'package:task_scheduler/state/state.dart';
+import 'package:task_scheduler/themes/themes.dart';
 
 class TaskSchedulerApp extends StatefulWidget {
   const TaskSchedulerApp({super.key});
@@ -37,7 +38,7 @@ class _TaskSchedulerAppState extends State<TaskSchedulerApp> {
     Destination(
       title: "Settings",
       icon: Icon(Icons.settings_rounded),
-      page: Placeholder(),
+      page: SettingsPage(),
     ),
   ];
   @override
@@ -49,7 +50,9 @@ class _TaskSchedulerAppState extends State<TaskSchedulerApp> {
           title: "Task Scheduler",
           theme: ThemeData(
             useMaterial3: true,
-            colorScheme: context.watch<AppState>().theme,
+            colorScheme: context.watch<AppState>().themeIsDark
+                ? darkColorScheme
+                : lightColorScheme,
           ),
           home: Scaffold(
             appBar: AppBar(title: Text(destinations[selectedIndex].title)),
