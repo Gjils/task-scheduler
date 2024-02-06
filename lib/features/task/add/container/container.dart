@@ -33,12 +33,13 @@ class _AddNewTaskState extends State<AddNewTask> {
             child: Align(
               alignment: FractionalOffset.bottomCenter,
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    SizedBox(
-                      width: 140,
-                      height: 50,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Flexible(
+                    child: FractionallySizedBox(
+                      widthFactor: .95,
+                      heightFactor: .1,
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         child: Text(
@@ -49,13 +50,14 @@ class _AddNewTaskState extends State<AddNewTask> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 140,
-                      height: 50,
+                  ),
+                  Flexible(
+                    child: FractionallySizedBox(
+                      widthFactor: .95,
+                      heightFactor: .1,
                       child: FilledButton(
                         onPressed: () {
                           widget.onSave();
-                          Navigator.pop(context);
                         },
                         child: Text(
                           "Save",
@@ -64,8 +66,10 @@ class _AddNewTaskState extends State<AddNewTask> {
                           ),
                         ),
                       ),
-                    )
-                  ]),
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],

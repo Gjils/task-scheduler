@@ -48,7 +48,9 @@ class _TaskSchedulerAppState extends State<TaskSchedulerApp> {
           debugShowCheckedModeBanner: false,
           title: "Task Scheduler",
           theme: ThemeData(
-              useMaterial3: true, colorScheme: context.watch<AppState>().theme),
+            useMaterial3: true,
+            colorScheme: context.watch<AppState>().theme,
+          ),
           home: Scaffold(
             appBar: AppBar(title: Text(destinations[selectedIndex].title)),
             body: destinations[selectedIndex].page,

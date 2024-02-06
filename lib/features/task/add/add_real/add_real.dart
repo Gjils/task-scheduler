@@ -13,7 +13,22 @@ class AddRealTask extends StatefulWidget {
 }
 
 class _AddRealTaskState extends State<AddRealTask> {
-  var _controller = TextEditingController();
+  dynamic _controller;
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  var _text = "";
+
+  String? get _errorText {
+    final text = _controller.value.text;
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +42,22 @@ class _AddRealTaskState extends State<AddRealTask> {
           ),
         ),
         onSave: () {
+          if (_errorText != null) {
+            return;
+          }
           addRealTask(task: TaskReal(title: _controller.text, isDone: false));
+          Navigator.pop(context);
         },
         content: Column(
           children: [
             TextField(
               controller: _controller,
               autofocus: true,
+              onChanged: (text) => setState(() => _text),
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Task name',
+                errorText: _errorText,
               ),
             ),
           ],

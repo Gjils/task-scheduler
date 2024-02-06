@@ -9,12 +9,15 @@ class TemplatesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final templates = context.watch<AppState>().templates;
     final templatesWidgets = templates
-        .map((template) => ListTile(title: Text(template.title)))
+        .map((template) => TemplateCard(template: template))
         .cast<Widget>()
         .toList();
     return Scaffold(
-      body: ListView(
-        children: templatesWidgets,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListView(
+          children: templatesWidgets,
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showModalBottomSheet(

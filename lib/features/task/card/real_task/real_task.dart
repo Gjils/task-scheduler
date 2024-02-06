@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_scheduler/features/task/edit/edit_real/edit_real.dart';
 import 'package:task_scheduler/features/task/task.dart';
 import 'package:task_scheduler/state/state.dart';
 
@@ -35,7 +36,15 @@ class RealTaskCard extends StatelessWidget {
             style: TextStyle(fontSize: 17),
           ),
           trailing: IconButton(
-            onPressed: () => "",
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                useSafeArea: true,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (context) => EditRealTask(task: task),
+              );
+            },
             icon: Icon(
               Icons.edit,
             ),
