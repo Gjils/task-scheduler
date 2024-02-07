@@ -1,16 +1,26 @@
-# task_scheduler
+# Task Scheduler
 
-A new Flutter project.
+[Download app (android)](https://github.com/Gjils/task-scheduler/blob/main/preview/task-scheduler.apk)
+  
+Simple task scheduler written on Flutter.
 
-## Getting Started
+[![Stack](https://skillicons.dev/icons?i=flutter)](https://skillicons.dev)
 
-This project is a starting point for a Flutter application.
+***
 
-A few resources to get you started if this is your first Flutter project:
+## Advantages:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* Material 3 UI
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Yau can add templates
+ 
+* You can switch between
+
+***
+ 
+## Preview
+  
+<img src="https://github.com/Gjils/task-scheduler/blob/main/preview/mobile-dark.jpg" alt="Mobile dark" width="322"/>
+
+> Mobile dark
+
