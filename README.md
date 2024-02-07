@@ -14,7 +14,7 @@ Simple task scheduler written on Flutter.
 
 * Yau can add templates
  
-* You can switch between
+* You can switch between dark and light theme
 
 ***
  
