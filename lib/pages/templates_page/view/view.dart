@@ -16,7 +16,18 @@ class TemplatesPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListView(
-          children: templatesWidgets,
+          children: templatesWidgets.isEmpty
+              ? [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    "There are no templates\nTry adding new",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ]
+              : templatesWidgets,
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

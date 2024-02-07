@@ -32,7 +32,7 @@ class _TaskSchedulerAppState extends State<TaskSchedulerApp> {
     ),
     Destination(
       title: "Templates",
-      icon: Icon(Icons.format_list_numbered_rounded),
+      icon: Icon(Icons.bookmark),
       page: TemplatesPage(),
     ),
     Destination(

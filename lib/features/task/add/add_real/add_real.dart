@@ -18,13 +18,21 @@ class _AddRealTaskState extends State<AddRealTask> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _focus.addListener(_onFocusChange);
   }
 
+  FocusNode _focus = FocusNode();
   var _text = "";
+
+  void _onFocusChange() {
+    setState(() {
+      _text;
+    });
+  }
 
   String? get _errorText {
     final text = _controller.value.text;
-    if (text.isEmpty) {
+    if (text.isEmpty && !_focus.hasFocus) {
       return 'Can\'t be empty';
     }
     return null;
@@ -32,7 +40,24 @@ class _AddRealTaskState extends State<AddRealTask> {
 
   @override
   Widget build(BuildContext context) {
-    final addRealTask = context.watch<AppState>().addRealTask;
+    final state = context.watch<AppState>();
+    final addRealTask = state.addRealTask;
+    final templates = state.templates;
+    final templatesWidgets = templates
+        .map(
+          (item) => GestureDetector(
+            onTap: () {
+              Navigator.pop(context, item);
+            },
+            child: Card(
+              child: ListTile(
+                title: Text(item.title),
+              ),
+            ),
+          ),
+        )
+        .cast<Widget>()
+        .toList();
     return AddNewTask(
         label: Text(
           "Add new task",
@@ -52,6 +77,7 @@ class _AddRealTaskState extends State<AddRealTask> {
           children: [
             TextField(
               controller: _controller,
+              focusNode: _focus,
               autofocus: true,
               onChanged: (text) => setState(() => _text),
               decoration: InputDecoration(
@@ -60,6 +86,47 @@ class _AddRealTaskState extends State<AddRealTask> {
                 errorText: _errorText,
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
+            FilledButton.tonal(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Center(child: Text("Select template")),
+                      content: SizedBox(
+                        height: 300,
+                        width: 300,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: templatesWidgets.isEmpty
+                                ? [
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "There are no templates\nTry adding new",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ]
+                                : templatesWidgets,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ).then((value) {
+                    if (value == null) {
+                      return;
+                    }
+                    _controller.text = value.title;
+                    setState(() {
+                      _text;
+                    });
+                  });
+                },
+                child: Text("Import from templates"))
           ],
         ));
   }

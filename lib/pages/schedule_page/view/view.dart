@@ -12,11 +12,23 @@ class SchedulePage extends StatelessWidget {
         .map((task) => RealTaskCard(task: task))
         .cast<Widget>()
         .toList();
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListView(
-          children: tasksWidgets,
+          children: tasksWidgets.isEmpty
+              ? [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    "There are no tasks\nTry adding new",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ]
+              : tasksWidgets,
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

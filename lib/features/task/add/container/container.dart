@@ -39,13 +39,15 @@ class _AddNewTaskState extends State<AddNewTask> {
                   Flexible(
                     child: FractionallySizedBox(
                       widthFactor: .95,
-                      heightFactor: .1,
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          "Discard",
-                          style: TextStyle(
-                            fontSize: 15,
+                      child: SizedBox(
+                        height: 50,
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                            "Discard",
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       ),
@@ -54,15 +56,17 @@ class _AddNewTaskState extends State<AddNewTask> {
                   Flexible(
                     child: FractionallySizedBox(
                       widthFactor: .95,
-                      heightFactor: .1,
-                      child: FilledButton(
-                        onPressed: () {
-                          widget.onSave();
-                        },
-                        child: Text(
-                          "Save",
-                          style: TextStyle(
-                            fontSize: 15,
+                      child: SizedBox(
+                        height: 50,
+                        child: FilledButton(
+                          onPressed: () {
+                            widget.onSave();
+                          },
+                          child: Text(
+                            "Save",
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       ),

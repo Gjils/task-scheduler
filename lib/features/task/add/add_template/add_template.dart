@@ -18,13 +18,21 @@ class _AddTemplateState extends State<AddTemplate> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    _focus.addListener(_onFocusChange);
   }
 
+  FocusNode _focus = FocusNode();
+
   var _text = "";
+  void _onFocusChange() {
+    setState(() {
+      _text;
+    });
+  }
 
   String? get _errorText {
     final text = _controller.value.text;
-    if (text.isEmpty) {
+    if (text.isEmpty && !_focus.hasFocus) {
       return 'Can\'t be empty';
     }
     return null;
@@ -53,6 +61,7 @@ class _AddTemplateState extends State<AddTemplate> {
             TextField(
               controller: _controller,
               autofocus: true,
+              focusNode: _focus,
               onChanged: (text) => setState(() => _text),
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
