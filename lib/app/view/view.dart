@@ -6,7 +6,7 @@ import 'package:task_scheduler/pages/templates_page/templates_page.dart';
 import 'package:task_scheduler/pages/settings_page/settings_page.dart';
 import 'package:task_scheduler/features/navigation_bar/navigation_bar.dart';
 import 'package:task_scheduler/state/state.dart';
-import 'package:task_scheduler/themes/themes.dart';
+import 'package:task_scheduler/app/themes/themes.dart';
 
 class TaskSchedulerApp extends StatefulWidget {
   const TaskSchedulerApp({super.key});

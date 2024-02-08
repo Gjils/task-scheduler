@@ -46,17 +46,19 @@ class _EditContainerState extends State<EditContainer> {
                         Flexible(
                           child: FractionallySizedBox(
                             widthFactor: 1,
-                            heightFactor: .2,
-                            child: OutlinedButton(
-                              style: ButtonStyle(
-                                  foregroundColor:
-                                      MaterialStateProperty.all(theme.error),
-                                  side: MaterialStateProperty.all(
-                                      BorderSide(color: theme.error))),
-                              onPressed: () {
-                                widget.onDelete();
-                              },
-                              child: Text("Delete"),
+                            child: SizedBox(
+                              height: 50,
+                              child: OutlinedButton(
+                                style: ButtonStyle(
+                                    foregroundColor:
+                                        MaterialStateProperty.all(theme.error),
+                                    side: MaterialStateProperty.all(
+                                        BorderSide(color: theme.error))),
+                                onPressed: () {
+                                  widget.onDelete();
+                                },
+                                child: Text("Delete"),
+                              ),
                             ),
                           ),
                         ),
@@ -74,13 +76,15 @@ class _EditContainerState extends State<EditContainer> {
                           Flexible(
                             child: FractionallySizedBox(
                               widthFactor: .95,
-                              heightFactor: .2,
-                              child: OutlinedButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text(
-                                  "Discard",
-                                  style: TextStyle(
-                                    fontSize: 15,
+                              child: SizedBox(
+                                height: 50,
+                                child: OutlinedButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    "Discard",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -89,15 +93,17 @@ class _EditContainerState extends State<EditContainer> {
                           Flexible(
                             child: FractionallySizedBox(
                               widthFactor: .95,
-                              heightFactor: .2,
-                              child: FilledButton(
-                                onPressed: () {
-                                  widget.onSave();
-                                },
-                                child: Text(
-                                  "Save",
-                                  style: TextStyle(
-                                    fontSize: 15,
+                              child: SizedBox(
+                                height: 50,
+                                child: FilledButton(
+                                  onPressed: () {
+                                    widget.onSave();
+                                  },
+                                  child: Text(
+                                    "Save",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ),
                               ),

@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:task_scheduler/features/duration_picker/duration_picker.dart';
+import 'package:task_scheduler/features/name_text_field/name_text_field.dart';
 import 'package:task_scheduler/features/task/task.dart';
 
 import '../container/container.dart';
@@ -15,27 +17,36 @@ class EditTemplate extends StatefulWidget {
 }
 
 class _EditTemplateState extends State<EditTemplate> {
-  dynamic _controller;
+  ValueNotifier<Duration> durationController =
+      ValueNotifier<Duration>(Duration(minutes: 30));
+  String _text = "";
+  TextEditingController controller = TextEditingController();
+  FocusNode focus = FocusNode();
+  void refreshState() {
+    setState(() {
+      _text;
+    });
+  }
+
+  String? get errorText {
+    return getErrorText(
+      controller: controller,
+      focus: focus,
+    )();
+  }
+
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.template.title);
-  }
-
-  var _text = "";
-
-  String? get _errorText {
-    final text = _controller.value.text;
-    if (text.isEmpty) {
-      return 'Can\'t be empty';
-    }
-    return null;
+    controller.text = widget.template.title;
+    durationController.value = widget.template.duration;
   }
 
   @override
   Widget build(BuildContext context) {
     final replaceTemplate = context.watch<AppState>().replaceTemplate;
     final deleteTemplate = context.watch<AppState>().deleteTemplate;
+
     return EditContainer(
       label: Text(
         "Edit template",
@@ -45,11 +56,11 @@ class _EditTemplateState extends State<EditTemplate> {
         ),
       ),
       onSave: () {
-        if (_errorText != null) {
+        if (errorText != null) {
           return;
         }
         replaceTemplate(
-          newTask: TaskTemplate(title: _controller.text),
+          newTask: TaskTemplate(title: controller.text, duration: durationController.value),
           oldTask: widget.template,
         );
         Navigator.pop(context);
@@ -60,14 +71,17 @@ class _EditTemplateState extends State<EditTemplate> {
       },
       content: Column(
         children: [
-          TextField(
-            controller: _controller,
-            onChanged: (text) => setState(() => _text),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Template name',
-              errorText: _errorText,
-            ),
+          NameTextField(
+              controller: controller, focus: focus, refreshState: refreshState),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "Select duration",
+            style: TextStyle(fontSize: 16),
+          ),
+          DurationPicker(
+            durationController: durationController,
           ),
         ],
       ),

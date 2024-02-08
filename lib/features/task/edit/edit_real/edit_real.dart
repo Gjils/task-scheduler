@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:task_scheduler/features/duration_picker/duration_picker.dart';
+import 'package:task_scheduler/features/name_text_field/name_text_field.dart';
 import 'package:task_scheduler/features/task/task.dart';
 
 import '../container/container.dart';
@@ -15,26 +17,33 @@ class EditRealTask extends StatefulWidget {
 }
 
 class _EditRealTaskState extends State<EditRealTask> {
-  dynamic _controller;
+  ValueNotifier<Duration> durationController =
+      ValueNotifier<Duration>(Duration(minutes: 30));
+  String _text = "";
+  TextEditingController controller = TextEditingController();
+  FocusNode focus = FocusNode();
+  void refreshState() {
+    setState(() {
+      _text;
+    });
+  }
+
+  String? get errorText {
+    return getErrorText(
+      controller: controller,
+      focus: focus,
+    )();
+  }
+
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.task.title);
-  }
-
-  var _text = "";
-
-  String? get _errorText {
-    final text = _controller.value.text;
-    if (text.isEmpty) {
-      return 'Can\'t be empty';
-    }
-    return null;
+    controller.text = widget.task.title;
+    durationController.value = widget.task.duration;
   }
 
   @override
   Widget build(BuildContext context) {
-    // _controller.text = widget.task.title;
     final replaceTask = context.watch<AppState>().replaceTask;
     final deleteTask = context.watch<AppState>().deleteTask;
     return EditContainer(
@@ -46,12 +55,14 @@ class _EditRealTaskState extends State<EditRealTask> {
         ),
       ),
       onSave: () {
-        if (_errorText != null) {
+        if (errorText != null) {
           return;
         }
         replaceTask(
-          newTask:
-              TaskReal(title: _controller.text, isDone: widget.task.isDone),
+          newTask: TaskReal(
+              title: controller.text,
+              duration: durationController.value,
+              isDone: widget.task.isDone),
           oldTask: widget.task,
         );
         Navigator.pop(context);
@@ -62,14 +73,17 @@ class _EditRealTaskState extends State<EditRealTask> {
       },
       content: Column(
         children: [
-          TextField(
-            controller: _controller,
-            onChanged: (text) => setState(() => _text),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Task name',
-              errorText: _errorText,
-            ),
+          NameTextField(
+              controller: controller, focus: focus, refreshState: refreshState),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "Select duration",
+            style: TextStyle(fontSize: 16),
+          ),
+          DurationPicker(
+            durationController: durationController,
           ),
         ],
       ),
