@@ -26,12 +26,21 @@ Simple task scheduler written on Flutter.
 
 # TODO:
 
-Show timer
-Set completed
+Show timer +
+
+Set completed +
+
 Edit status in edit menu
+
 Daily schedule
+
 Categories
-More info visual info (Different colors for different status)
+
+More visual info (Different colors for different status) +-
+
 More settings (reset data)
+
 Notifications
+
 System widgets
+

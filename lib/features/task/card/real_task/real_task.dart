@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_scheduler/features/task/edit/edit_real/edit_real.dart';
 import 'package:task_scheduler/features/task/task.dart';
+import 'package:task_scheduler/features/time_status_sheet/time_status_sheet.dart';
 import 'package:task_scheduler/state/state.dart';
 
 class RealTaskCard extends StatefulWidget {
@@ -18,7 +19,6 @@ class RealTaskCard extends StatefulWidget {
 }
 
 class _RealTaskCardState extends State<RealTaskCard> {
-  var timerStatus = "";
   String getTimeString(duration) {
     int hours = duration.inHours;
     int minutes = duration.inMinutes;
@@ -26,16 +26,19 @@ class _RealTaskCardState extends State<RealTaskCard> {
     return "${hours == 0 ? "" : "${hours}h "}${minutes}m";
   }
 
+  var timerStatus = "";
   dynamic timer;
   @override
   void initState() {
-    print(widget.task.status);
     if (widget.task.status == "doing") {
       timer = Timer.periodic(Duration(seconds: 1), (timer) {
-        print(timer.tick);
-        setState(() {
-          timerStatus;
-        });
+        try {
+          setState(() {
+            timerStatus = timer.tick.toString();
+          });
+        } catch (e) {
+          timer.cancel();
+        }
       });
     }
     super.initState();
@@ -66,110 +69,124 @@ class _RealTaskCardState extends State<RealTaskCard> {
               size: 28,
             ),
           );
-          trailing = SizedBox(
-            width: 110,
+          trailing = Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Card(
+                  color: Theme.of(context).colorScheme.onTertiary,
+                  child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Center(
+                          child: Text(getTimeString(widget.task.duration))))),
+              IconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    builder: (context) => EditRealTask(task: widget.task),
+                  );
+                },
+                icon: Icon(
+                  Icons.edit,
+                ),
+              ),
+            ],
+          );
+        }
+      case "doing":
+        {
+          leading = Card(
+            color: Theme.of(context).colorScheme.onTertiary,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  height: 30,
-                  width: 70,
-                  child: Card(
-                    color: Theme.of(context).colorScheme.onTertiary,
-                    child: Center(
-                        child: Text(getTimeString(widget.task.duration))),
+                IconButton(
+                  onPressed: () {
+                    timer.cancel();
+                    replaceTask(
+                        newTask: TaskReal(
+                            title: widget.task.title,
+                            duration: widget.task.duration,
+                            status: "paused",
+                            completedPart: widget.task.completedPart +
+                                DateTime.now()
+                                    .difference(widget.task.lastActionTime!),
+                            lastActionTime: DateTime.now()),
+                        oldTask: widget.task);
+                  },
+                  icon: Icon(
+                    Icons.pause_rounded,
                   ),
                 ),
                 IconButton(
                   onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      useSafeArea: true,
-                      isScrollControlled: true,
-                      showDragHandle: true,
-                      builder: (context) => EditRealTask(task: widget.task),
-                    );
+                    timer.cancel();
+                    replaceTask(
+                        newTask: TaskReal(
+                            title: widget.task.title,
+                            duration: widget.task.duration,
+                            status: "done",
+                            completedPart: widget.task.completedPart +
+                                DateTime.now()
+                                    .difference(widget.task.lastActionTime!),
+                            lastActionTime: DateTime.now()),
+                        oldTask: widget.task);
                   },
                   icon: Icon(
-                    Icons.edit,
+                    Icons.done_rounded,
                   ),
                 ),
               ],
             ),
           );
-        }
-      case "doing":
-        {
-          leading = SizedBox(
-            width: 90,
+          trailing = GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                useSafeArea: true,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (context) => TimeStatus(
+                  task: widget.task,
+                ),
+              );
+            },
             child: Card(
               color: Theme.of(context).colorScheme.onTertiary,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      timer.cancel();
-                      replaceTask(
-                          newTask: TaskReal(
-                              title: widget.task.title,
-                              duration: widget.task.duration,
-                              status: "paused",
-                              completedPart: widget.task.completedPart +
-                                  DateTime.now()
-                                      .difference(widget.task.lastActionTime!),
-                              lastActionTime: DateTime.now()),
-                          oldTask: widget.task);
-                    },
-                    icon: Icon(
-                      Icons.pause_rounded,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        useSafeArea: true,
-                        isScrollControlled: true,
-                        showDragHandle: true,
-                        builder: (context) => EditRealTask(task: widget.task),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.done_rounded,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-          trailing = SizedBox(
-            width: 110,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    height: 30,
-                    width: 70,
-                    child: Card(
-                      color: Theme.of(context).colorScheme.onTertiary,
-                      child: Center(
-                          child: Text(getTimeString(widget.task.lastActionTime
-                              ?.add(widget.task.duration -
-                                  widget.task.completedPart)
-                              .difference(DateTime.now())))),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Center(
+                        child: Text(getTimeString(widget.task.lastActionTime
+                            ?.add(widget.task.duration -
+                                widget.task.completedPart)
+                            .difference(DateTime.now())))),
                   ),
-                  CircularCountDownTimer(
-                    width: 25,
-                    height: 25,
-                    initialDuration: widget.task.completedPart.inSeconds,
-                    duration: widget.task.duration.inSeconds,
-                    fillColor: Theme.of(context).colorScheme.onTertiary,
-                    ringColor: Theme.of(context).colorScheme.background,
-                    isTimerTextShown: false,
-                    isReverse: false,
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: CircularCountDownTimer(
+                      width: 25,
+                      height: 25,
+                      initialDuration: min(
+                          widget.task.completedPart.inSeconds +
+                              DateTime.now()
+                                  .difference(widget.task.lastActionTime ??
+                                      DateTime.now())
+                                  .inSeconds,
+                          widget.task.duration.inSeconds),
+                      duration: widget.task.duration.inSeconds,
+                      fillColor:
+                          Theme.of(context).colorScheme.onPrimaryContainer,
+                      ringColor: Theme.of(context).colorScheme.onTertiary,
+                      isTimerTextShown: false,
+                      isReverse: false,
+                    ),
                   ),
                 ],
               ),
@@ -178,98 +195,153 @@ class _RealTaskCardState extends State<RealTaskCard> {
         }
       case "paused":
         {
-          leading = SizedBox(
-            width: 90,
-            child: Card(
-              color: Theme.of(context).colorScheme.onTertiary,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      replaceTask(
-                          newTask: TaskReal(
-                              title: widget.task.title,
-                              duration: widget.task.duration,
-                              status: "doing",
-                              completedPart: widget.task.completedPart,
-                              lastActionTime: DateTime.now()),
-                          oldTask: widget.task);
-                    },
-                    icon: Icon(
-                      Icons.play_arrow_rounded,
-                    ),
+          leading = Card(
+            color: Theme.of(context).colorScheme.onTertiary,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    replaceTask(
+                        newTask: TaskReal(
+                            title: widget.task.title,
+                            duration: widget.task.duration,
+                            status: "doing",
+                            completedPart: widget.task.completedPart,
+                            lastActionTime: DateTime.now()),
+                        oldTask: widget.task);
+                  },
+                  icon: Icon(
+                    Icons.play_arrow_rounded,
                   ),
-                  IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        useSafeArea: true,
-                        isScrollControlled: true,
-                        showDragHandle: true,
-                        builder: (context) => EditRealTask(task: widget.task),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.done_rounded,
-                    ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    replaceTask(
+                        newTask: TaskReal(
+                            title: widget.task.title,
+                            duration: widget.task.duration,
+                            status: "done",
+                            completedPart: widget.task.completedPart +
+                                DateTime.now()
+                                    .difference(widget.task.lastActionTime!),
+                            lastActionTime: DateTime.now()),
+                        oldTask: widget.task);
+                  },
+                  icon: Icon(
+                    Icons.done_rounded,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
           CountDownController controller = CountDownController();
-          trailing = SizedBox(
-            width: 110,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10),
+          trailing = GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                useSafeArea: true,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (context) => TimeStatus(task: widget.task),
+              );
+            },
+            child: Card(
+              color: Theme.of(context).colorScheme.onTertiary,
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    height: 30,
-                    width: 70,
-                    child: Card(
-                      color: Theme.of(context).colorScheme.onTertiary,
-                      child: Center(
-                          child: Text(getTimeString(widget.task.duration -
-                              widget.task.completedPart))),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Center(
+                        child: Text(getTimeString(widget.task.lastActionTime
+                            ?.add(widget.task.duration -
+                                widget.task.completedPart)
+                            .difference(DateTime.now())))),
                   ),
-                  CircularCountDownTimer(
-                    width: 25,
-                    height: 25,
-                    controller: controller,
-                    initialDuration: min(widget.task.completedPart.inSeconds,
-                        widget.task.duration.inSeconds),
-                    duration: widget.task.duration.inSeconds,
-                    fillColor: Theme.of(context).colorScheme.onTertiary,
-                    ringColor: Theme.of(context).colorScheme.background,
-                    isTimerTextShown: false,
-                    isReverse: false,
-                    autoStart: true,
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: CircularCountDownTimer(
+                      controller: controller,
+                      width: 25,
+                      height: 25,
+                      initialDuration: min(
+                          widget.task.completedPart.inSeconds +
+                              DateTime.now()
+                                  .difference(widget.task.lastActionTime ??
+                                      DateTime.now())
+                                  .inSeconds,
+                          widget.task.duration.inSeconds),
+                      duration: widget.task.duration.inSeconds,
+                      fillColor:
+                          Theme.of(context).colorScheme.onPrimaryContainer,
+                      ringColor: Theme.of(context).colorScheme.onTertiary,
+                      isTimerTextShown: false,
+                      isReverse: false,
+                    ),
                   ),
                 ],
               ),
             ),
           );
-          Timer(Duration(seconds: 1), () {
+          Timer.run(() {
             controller.pause();
           });
         }
+      case "done":
+        {
+          leading = Padding(
+            padding:
+                const EdgeInsets.only(left: 10) + EdgeInsets.only(right: 7),
+            child: Icon(
+              Icons.check_circle_outline_rounded,
+              size: 28,
+            ),
+          );
+          trailing = Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Card(
+                  color: Theme.of(context).colorScheme.onTertiary,
+                  child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Center(
+                          child: Text(getTimeString(widget.task.duration))))),
+              IconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    builder: (context) => EditRealTask(task: widget.task),
+                  );
+                },
+                icon: Icon(
+                  Icons.edit,
+                ),
+              ),
+            ],
+          );
+        }
     }
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5),
-        child: ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 4),
-          leading: leading,
-          title: Text(
-            widget.task.title,
-            style: TextStyle(fontSize: 15),
+    return Opacity(
+      opacity: widget.task.status == "done" ? 0.5 : 1.0,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 4),
+            leading: leading,
+            title: Text(
+              widget.task.title,
+              style: TextStyle(fontSize: 15),
+            ),
+            trailing: trailing,
           ),
-          trailing: trailing,
         ),
       ),
     );

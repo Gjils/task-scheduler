@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+Uuid uuidGenerator = Uuid();
+
 class Task {
   Task({
     required this.title,
@@ -20,7 +22,7 @@ class TaskTemplate extends Task {
   });
 
   final uuid = Uuid();
-  
+
   @override
   String get type => "Template";
 }
@@ -31,11 +33,18 @@ class TaskReal extends Task with ChangeNotifier {
     required super.duration,
     required this.status,
     required this.completedPart,
+    uuid,
     this.parent,
     this.lastActionTime,
-  });
+  }) {
+    if (uuid != null) {
+      this.uuid = uuid;
+    } else {
+      this.uuid = Uuid().v1();
+    }
+  }
 
-  final uuid = Uuid();
+  late String uuid;
 
   final TaskTemplate? parent;
 
