@@ -6,8 +6,11 @@ class NameTextField extends StatelessWidget {
     required this.controller,
     required this.focus,
     required this.refreshState,
+    required this.label,
   });
 
+
+  final String label;
   final TextEditingController controller;
   final FocusNode focus;
   final void Function() refreshState;
@@ -22,13 +25,13 @@ class NameTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       focusNode: focus,
-      autofocus: true,
+      autofocus: errorText == null ? false : true,
       onChanged: (text) {
         refreshState();
       },
       decoration: InputDecoration(
         border: OutlineInputBorder(),
-        labelText: 'Task name',
+        labelText: label,
         errorText: errorText,
       ),
     );

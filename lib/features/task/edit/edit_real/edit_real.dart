@@ -60,9 +60,11 @@ class _EditRealTaskState extends State<EditRealTask> {
         }
         replaceTask(
           newTask: TaskReal(
-              title: controller.text,
-              duration: durationController.value,
-              isDone: widget.task.isDone),
+            title: controller.text,
+            duration: durationController.value,
+            status: widget.task.status,
+            completedPart: widget.task.completedPart,
+          ),
           oldTask: widget.task,
         );
         Navigator.pop(context);
@@ -74,7 +76,11 @@ class _EditRealTaskState extends State<EditRealTask> {
       content: Column(
         children: [
           NameTextField(
-              controller: controller, focus: focus, refreshState: refreshState),
+            label: "Task name",
+            controller: controller,
+            focus: focus,
+            refreshState: refreshState,
+          ),
           SizedBox(
             height: 20,
           ),

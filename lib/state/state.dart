@@ -16,11 +16,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleDone(task) {
-    _realTasks[_realTasks.indexOf(task)].toggleDone();
-    notifyListeners();
-  }
-
   void replaceTask({required TaskReal newTask, required TaskReal oldTask}) {
     _realTasks[_realTasks.indexOf(oldTask)] = newTask;
     notifyListeners();
@@ -50,6 +45,8 @@ class AppState extends ChangeNotifier {
     _templates.remove(task);
     notifyListeners();
   }
+
+  
 
   List<TaskTemplate> get templates => _templates;
 }

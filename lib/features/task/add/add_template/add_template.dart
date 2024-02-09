@@ -58,7 +58,11 @@ class _AddTemplateState extends State<AddTemplate> {
       content: Column(
         children: [
           NameTextField(
-              controller: controller, focus: focus, refreshState: refreshState),
+            label: "Template name",
+            controller: controller,
+            focus: focus,
+            refreshState: refreshState,
+          ),
           SizedBox(
             height: 20,
           ),

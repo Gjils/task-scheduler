@@ -66,6 +66,7 @@ class _AddRealTaskState extends State<AddRealTask> {
         )
         .cast<Widget>()
         .toList();
+
     return AddNewTask(
       label: Text(
         "Add new task",
@@ -80,9 +81,11 @@ class _AddRealTaskState extends State<AddRealTask> {
         }
         addRealTask(
           task: TaskReal(
-              title: controller.text,
-              duration: durationController.value,
-              isDone: false),
+            title: controller.text,
+            duration: durationController.value,
+            status: "not started",
+            completedPart: Duration(minutes: 0),
+          ),
         );
         Navigator.pop(context);
       },
@@ -92,6 +95,7 @@ class _AddRealTaskState extends State<AddRealTask> {
             height: 20,
           ),
           NameTextField(
+            label: "Task name",
             controller: controller,
             focus: focus,
             refreshState: refreshState,

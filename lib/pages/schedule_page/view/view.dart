@@ -9,7 +9,10 @@ class SchedulePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final realTasks = context.watch<AppState>().realTasks;
     final tasksWidgets = realTasks
-        .map((task) => RealTaskCard(task: task))
+        .map((task) => RealTaskCard(
+              task: task,
+              key: Key(task.uuid.toString() + task.status),
+            ))
         .cast<Widget>()
         .toList();
 

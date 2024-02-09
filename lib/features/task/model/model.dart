@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class Task {
   Task({
@@ -18,6 +19,8 @@ class TaskTemplate extends Task {
     required super.duration,
   });
 
+  final uuid = Uuid();
+  
   @override
   String get type => "Template";
 }
@@ -26,16 +29,19 @@ class TaskReal extends Task with ChangeNotifier {
   TaskReal({
     required super.title,
     required super.duration,
-    required this.isDone,
+    required this.status,
+    required this.completedPart,
     this.parent,
+    this.lastActionTime,
   });
 
-  final dynamic parent;
-  bool isDone;
+  final uuid = Uuid();
 
-  void toggleDone() {
-    isDone = !isDone;
-  }
+  final TaskTemplate? parent;
+
+  String status;
+  Duration completedPart;
+  DateTime? lastActionTime;
 
   @override
   String get type => "Real";

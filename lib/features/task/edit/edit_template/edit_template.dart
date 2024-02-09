@@ -60,7 +60,8 @@ class _EditTemplateState extends State<EditTemplate> {
           return;
         }
         replaceTemplate(
-          newTask: TaskTemplate(title: controller.text, duration: durationController.value),
+          newTask: TaskTemplate(
+              title: controller.text, duration: durationController.value),
           oldTask: widget.template,
         );
         Navigator.pop(context);
@@ -72,7 +73,11 @@ class _EditTemplateState extends State<EditTemplate> {
       content: Column(
         children: [
           NameTextField(
-              controller: controller, focus: focus, refreshState: refreshState),
+            label: "Template name",
+            controller: controller,
+            focus: focus,
+            refreshState: refreshState,
+          ),
           SizedBox(
             height: 20,
           ),
