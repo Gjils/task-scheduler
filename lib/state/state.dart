@@ -26,6 +26,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void insertTask({required index, required item}) {
+    _realTasks.insert(index, item);
+  }
+
   List<TaskReal> get realTasks => _realTasks;
 
   var _templates = <TaskTemplate>[];

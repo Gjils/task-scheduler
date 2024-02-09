@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_scheduler/features/duration_picker/duration_picker.dart';
 import 'package:task_scheduler/features/name_text_field/name_text_field.dart';
@@ -28,6 +28,8 @@ class _EditRealTaskState extends State<EditRealTask> {
     });
   }
 
+  late bool isDone;
+
   String? get errorText {
     return getErrorText(
       controller: controller,
@@ -38,6 +40,7 @@ class _EditRealTaskState extends State<EditRealTask> {
   @override
   void initState() {
     super.initState();
+    isDone = widget.task.status == "done";
     controller.text = widget.task.title;
     durationController.value = widget.task.duration;
   }
@@ -62,8 +65,8 @@ class _EditRealTaskState extends State<EditRealTask> {
           newTask: TaskReal(
             title: controller.text,
             duration: durationController.value,
-            status: widget.task.status,
-            completedPart: widget.task.completedPart,
+            status: isDone ? "done" : "not started",
+            completedPart: Duration(minutes: 0),
           ),
           oldTask: widget.task,
         );
@@ -91,6 +94,15 @@ class _EditRealTaskState extends State<EditRealTask> {
           DurationPicker(
             durationController: durationController,
           ),
+          SwitchListTile(
+            value: isDone,
+            onChanged: (bool newStatus) {
+              setState(() {
+                isDone = newStatus;
+              });
+            },
+            title: Text("Done"),
+          )
         ],
       ),
     );

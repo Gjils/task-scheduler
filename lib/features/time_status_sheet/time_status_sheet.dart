@@ -49,11 +49,13 @@ class _TimeStatusState extends State<TimeStatus> {
             height: 200,
             strokeWidth: 20,
             initialDuration: min(
-                widget.task.completedPart.inSeconds +
-                    DateTime.now()
-                        .difference(
-                            widget.task.lastActionTime ?? DateTime.now())
-                        .inSeconds,
+                widget.task.status == "doing"
+                    ? widget.task.completedPart.inSeconds +
+                        DateTime.now()
+                            .difference(
+                                widget.task.lastActionTime ?? DateTime.now())
+                            .inSeconds
+                    : widget.task.completedPart.inSeconds,
                 widget.task.duration.inSeconds),
             duration: widget.task.duration.inSeconds,
             fillColor: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -67,13 +69,9 @@ class _TimeStatusState extends State<TimeStatus> {
           Text(
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
-            "Remaining: ${getTimeString(
-              widget.task.lastActionTime
-                  ?.add(widget.task.duration - widget.task.completedPart)
-                  .difference(
-                    DateTime.now(),
-                  ),
-            )}\nSpent: ${getTimeString(DateTime.now().difference(widget.task.lastActionTime ?? DateTime.now()) + widget.task.completedPart)}",
+            "Remaining: ${getTimeString(widget.task.status == "doing" ? widget.task.lastActionTime?.add(widget.task.duration - widget.task.completedPart).difference(
+                  DateTime.now(),
+                ) : widget.task.duration - widget.task.completedPart)}\nSpent: ${getTimeString((widget.task.status == "doing" ? DateTime.now().difference(widget.task.lastActionTime ?? DateTime.now()) : Duration(minutes: 0)) + widget.task.completedPart)}",
           ),
         ],
       ),

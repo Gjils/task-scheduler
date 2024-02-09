@@ -30,17 +30,24 @@ Show timer +
 
 Set completed +
 
-Edit status in edit menu
+Task reorder +
+
+Import templates UI +
+
+Edit status in edit menu +
 
 Daily schedule
+
+Save data in storage
+
+More settings (reset data)
+
+Templates search
 
 Categories
 
 More visual info (Different colors for different status) +-
 
-More settings (reset data)
-
 Notifications
 
 System widgets
-

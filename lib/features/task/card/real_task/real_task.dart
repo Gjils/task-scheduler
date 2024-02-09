@@ -10,9 +10,10 @@ import 'package:task_scheduler/features/time_status_sheet/time_status_sheet.dart
 import 'package:task_scheduler/state/state.dart';
 
 class RealTaskCard extends StatefulWidget {
-  const RealTaskCard({super.key, required this.task});
+  const RealTaskCard({super.key, required this.task, required this.index});
 
   final TaskReal task;
+  final int index;
 
   @override
   State<RealTaskCard> createState() => _RealTaskCardState();
@@ -256,10 +257,8 @@ class _RealTaskCardState extends State<RealTaskCard> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: Center(
-                        child: Text(getTimeString(widget.task.lastActionTime
-                            ?.add(widget.task.duration -
-                                widget.task.completedPart)
-                            .difference(DateTime.now())))),
+                        child: Text(getTimeString(
+                            widget.task.duration - widget.task.completedPart))),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -328,19 +327,22 @@ class _RealTaskCardState extends State<RealTaskCard> {
         }
     }
 
-    return Opacity(
-      opacity: widget.task.status == "done" ? 0.5 : 1.0,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 4),
-            leading: leading,
-            title: Text(
-              widget.task.title,
-              style: TextStyle(fontSize: 15),
+    return ReorderableDelayedDragStartListener(
+      index: widget.index,
+      child: Opacity(
+        opacity: widget.task.status == "done" ? 0.5 : 1.0,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 4),
+              leading: leading,
+              title: Text(
+                widget.task.title,
+                style: TextStyle(fontSize: 17),
+              ),
+              trailing: trailing,
             ),
-            trailing: trailing,
           ),
         ),
       ),
