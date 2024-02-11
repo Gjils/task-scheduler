@@ -37,6 +37,12 @@ dependencies:
   provider: ^6.1.1
   circular_countdown_timer: ^0.2.3
   uuid: ^4.3.2
+  weekly_calendar: ^0.1.2
+  sqflite: any
+  path_provider: any
+  path: any
+  sqflite_common_ffi: any
+  intl: any
 
 dev_dependencies:
   flutter_test:

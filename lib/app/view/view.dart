@@ -45,7 +45,9 @@ class _TaskSchedulerAppState extends State<TaskSchedulerApp> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => AppState(),
-      builder: (context, child) => MaterialApp(
+      builder: (context, child) {
+        context.watch<AppState>().getTasksByDate();
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: "Task Scheduler",
           theme: ThemeData(
@@ -61,7 +63,9 @@ class _TaskSchedulerAppState extends State<TaskSchedulerApp> {
                 destinations: destinations,
                 selectedIndex: selectedIndex,
                 setSelectedIndex: setSelectedIndex),
-          )),
+          ),
+        );
+      },
     );
   }
 }

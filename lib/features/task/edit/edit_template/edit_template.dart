@@ -61,7 +61,10 @@ class _EditTemplateState extends State<EditTemplate> {
         }
         replaceTemplate(
           newTask: TaskTemplate(
-              title: controller.text, duration: durationController.value),
+            title: controller.text,
+            duration: durationController.value,
+            uuid: widget.template.uuid,
+          ),
           oldTask: widget.template,
         );
         Navigator.pop(context);

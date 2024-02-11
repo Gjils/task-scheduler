@@ -12,11 +12,14 @@ class TemplatesPage extends StatelessWidget {
         .map((template) => TemplateCard(template: template))
         .cast<Widget>()
         .toList();
+    templatesWidgets.add(SizedBox(
+      height: 80,
+    ));
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListView(
-          children: templatesWidgets.isEmpty
+          children: templates.isEmpty
               ? [
                   SizedBox(
                     height: 30,

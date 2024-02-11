@@ -52,8 +52,7 @@ class _TimeStatusState extends State<TimeStatus> {
                 widget.task.status == "doing"
                     ? widget.task.completedPart.inSeconds +
                         DateTime.now()
-                            .difference(
-                                widget.task.lastActionTime ?? DateTime.now())
+                            .difference(widget.task.lastActionTime)
                             .inSeconds
                     : widget.task.completedPart.inSeconds,
                 widget.task.duration.inSeconds),
@@ -69,9 +68,9 @@ class _TimeStatusState extends State<TimeStatus> {
           Text(
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
-            "Remaining: ${getTimeString(widget.task.status == "doing" ? widget.task.lastActionTime?.add(widget.task.duration - widget.task.completedPart).difference(
+            "Remaining: ${getTimeString(widget.task.status == "doing" ? widget.task.lastActionTime.add(widget.task.duration - widget.task.completedPart).difference(
                   DateTime.now(),
-                ) : widget.task.duration - widget.task.completedPart)}\nSpent: ${getTimeString((widget.task.status == "doing" ? DateTime.now().difference(widget.task.lastActionTime ?? DateTime.now()) : Duration(minutes: 0)) + widget.task.completedPart)}",
+                ) : widget.task.duration - widget.task.completedPart)}\nSpent: ${getTimeString((widget.task.status == "doing" ? DateTime.now().difference(widget.task.lastActionTime) : Duration(minutes: 0)) + widget.task.completedPart)}",
           ),
         ],
       ),

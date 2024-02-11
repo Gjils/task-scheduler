@@ -62,7 +62,9 @@ class _RealTaskCardState extends State<RealTaskCard> {
                       duration: widget.task.duration,
                       status: "doing",
                       completedPart: Duration(minutes: 0),
-                      lastActionTime: DateTime.now()),
+                      lastActionTime: DateTime.now(),
+                      creationDate: widget.task.creationDate,
+                      uuid: widget.task.uuid),
                   oldTask: widget.task);
             },
             icon: Icon(
@@ -114,8 +116,10 @@ class _RealTaskCardState extends State<RealTaskCard> {
                             status: "paused",
                             completedPart: widget.task.completedPart +
                                 DateTime.now()
-                                    .difference(widget.task.lastActionTime!),
-                            lastActionTime: DateTime.now()),
+                                    .difference(widget.task.lastActionTime),
+                            lastActionTime: DateTime.now(),
+                            creationDate: widget.task.creationDate,
+                            uuid: widget.task.uuid),
                         oldTask: widget.task);
                   },
                   icon: Icon(
@@ -127,13 +131,16 @@ class _RealTaskCardState extends State<RealTaskCard> {
                     timer.cancel();
                     replaceTask(
                         newTask: TaskReal(
-                            title: widget.task.title,
-                            duration: widget.task.duration,
-                            status: "done",
-                            completedPart: widget.task.completedPart +
-                                DateTime.now()
-                                    .difference(widget.task.lastActionTime!),
-                            lastActionTime: DateTime.now()),
+                          title: widget.task.title,
+                          duration: widget.task.duration,
+                          status: "done",
+                          completedPart: widget.task.completedPart +
+                              DateTime.now()
+                                  .difference(widget.task.lastActionTime),
+                          lastActionTime: DateTime.now(),
+                          creationDate: widget.task.creationDate,
+                          uuid: widget.task.uuid,
+                        ),
                         oldTask: widget.task);
                   },
                   icon: Icon(
@@ -165,7 +172,7 @@ class _RealTaskCardState extends State<RealTaskCard> {
                     padding: const EdgeInsets.only(left: 10),
                     child: Center(
                         child: Text(getTimeString(widget.task.lastActionTime
-                            ?.add(widget.task.duration -
+                            .add(widget.task.duration -
                                 widget.task.completedPart)
                             .difference(DateTime.now())))),
                   ),
@@ -177,8 +184,7 @@ class _RealTaskCardState extends State<RealTaskCard> {
                       initialDuration: min(
                           widget.task.completedPart.inSeconds +
                               DateTime.now()
-                                  .difference(widget.task.lastActionTime ??
-                                      DateTime.now())
+                                  .difference(widget.task.lastActionTime)
                                   .inSeconds,
                           widget.task.duration.inSeconds),
                       duration: widget.task.duration.inSeconds,
@@ -206,11 +212,14 @@ class _RealTaskCardState extends State<RealTaskCard> {
                   onPressed: () {
                     replaceTask(
                         newTask: TaskReal(
-                            title: widget.task.title,
-                            duration: widget.task.duration,
-                            status: "doing",
-                            completedPart: widget.task.completedPart,
-                            lastActionTime: DateTime.now()),
+                          title: widget.task.title,
+                          duration: widget.task.duration,
+                          status: "doing",
+                          completedPart: widget.task.completedPart,
+                          lastActionTime: DateTime.now(),
+                          creationDate: widget.task.creationDate,
+                          uuid: widget.task.uuid,
+                        ),
                         oldTask: widget.task);
                   },
                   icon: Icon(
@@ -221,13 +230,16 @@ class _RealTaskCardState extends State<RealTaskCard> {
                   onPressed: () {
                     replaceTask(
                         newTask: TaskReal(
-                            title: widget.task.title,
-                            duration: widget.task.duration,
-                            status: "done",
-                            completedPart: widget.task.completedPart +
-                                DateTime.now()
-                                    .difference(widget.task.lastActionTime!),
-                            lastActionTime: DateTime.now()),
+                          title: widget.task.title,
+                          duration: widget.task.duration,
+                          status: "done",
+                          completedPart: widget.task.completedPart +
+                              DateTime.now()
+                                  .difference(widget.task.lastActionTime),
+                          lastActionTime: DateTime.now(),
+                          creationDate: widget.task.creationDate,
+                          uuid: widget.task.uuid,
+                        ),
                         oldTask: widget.task);
                   },
                   icon: Icon(
@@ -269,8 +281,7 @@ class _RealTaskCardState extends State<RealTaskCard> {
                       initialDuration: min(
                           widget.task.completedPart.inSeconds +
                               DateTime.now()
-                                  .difference(widget.task.lastActionTime ??
-                                      DateTime.now())
+                                  .difference(widget.task.lastActionTime)
                                   .inSeconds,
                           widget.task.duration.inSeconds),
                       duration: widget.task.duration.inSeconds,

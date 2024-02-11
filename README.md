@@ -36,7 +36,15 @@ Import templates UI +
 
 Edit status in edit menu +
 
-Daily schedule
+App logo +-
+
++1 Sec
+
+Add padding
+
+Templates time
+
+Daily schedule +
 
 Save data in storage
 
@@ -51,3 +59,5 @@ More visual info (Different colors for different status) +-
 Notifications
 
 System widgets
+
+Adaptive design

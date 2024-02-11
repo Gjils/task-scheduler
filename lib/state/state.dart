@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:task_scheduler/data/database.dart';
 import 'package:task_scheduler/features/task/task.dart';
 
 class AppState extends ChangeNotifier {
+  var currentDay = DateTime.now();
+
+  void changeDay(date) async {
+    currentDay = date;
+    getTasksByDate();
+    notifyListeners();
+  }
+
+  void getTasksByDate() async {
+    _realTasks = await DBProvider.db.getTasksByDate(currentDay);
+
+    notifyListeners();
+  }
+
   var themeIsDark = true;
 
   void setTheme(bool isDark) {
@@ -11,23 +26,29 @@ class AppState extends ChangeNotifier {
 
   var _realTasks = <TaskReal>[];
 
-  void addRealTask({required TaskReal task}) {
+  void addRealTask({required TaskReal task}) async {
     _realTasks.add(task);
+    await DBProvider.db.newTask(task);
     notifyListeners();
   }
 
-  void replaceTask({required TaskReal newTask, required TaskReal oldTask}) {
+  void replaceTask(
+      {required TaskReal newTask, required TaskReal oldTask}) async {
+    print("${oldTask.uuid} ${newTask.uuid}+");
     _realTasks[_realTasks.indexOf(oldTask)] = newTask;
+    await DBProvider.db.updateTask(newTask);
     notifyListeners();
   }
 
   void deleteTask({required task}) {
     _realTasks.remove(task);
+    DBProvider.db.deleteTask(task);
     notifyListeners();
   }
 
   void insertTask({required index, required item}) {
     _realTasks.insert(index, item);
+    notifyListeners();
   }
 
   List<TaskReal> get realTasks => _realTasks;
@@ -49,8 +70,6 @@ class AppState extends ChangeNotifier {
     _templates.remove(task);
     notifyListeners();
   }
-
-  
 
   List<TaskTemplate> get templates => _templates;
 }

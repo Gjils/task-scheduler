@@ -67,6 +67,9 @@ class _EditRealTaskState extends State<EditRealTask> {
             duration: durationController.value,
             status: isDone ? "done" : "not started",
             completedPart: Duration(minutes: 0),
+            lastActionTime: DateTime.now(),
+            creationDate: DateTime.now(),
+            uuid: widget.task.uuid,
           ),
           oldTask: widget.task,
         );
