@@ -39,7 +39,9 @@ class TemplatesPage extends StatelessWidget {
           useSafeArea: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder: (context) => AddTemplate(),
+          builder: (context) => AddTemplate(
+            index: (templates.length + 1).toDouble(),
+          ),
         ),
         label: Text("New template"),
         icon: Icon(Icons.add),

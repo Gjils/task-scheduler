@@ -10,10 +10,15 @@ import 'package:task_scheduler/features/name_text_field/name_text_field.dart';
 import '../import_dialog/import_dialog.dart';
 
 class AddRealTask extends StatefulWidget {
-  const AddRealTask({super.key, this.template, required this.selectedDate});
+  const AddRealTask(
+      {super.key,
+      this.template,
+      required this.selectedDate,
+      required this.index});
 
   final TaskTemplate? template;
   final DateTime selectedDate;
+  final double index;
 
   @override
   State<AddRealTask> createState() => _AddRealTaskState();
@@ -82,12 +87,14 @@ class _AddRealTaskState extends State<AddRealTask> {
         }
         addRealTask(
           task: TaskReal(
-              title: controller.text,
-              duration: durationController.value,
-              status: "not started",
-              completedPart: Duration(minutes: 0),
-              lastActionTime: DateTime.now(),
-              creationDate: widget.selectedDate),
+            index: widget.index,
+            title: controller.text,
+            duration: durationController.value,
+            status: "not started",
+            completedPart: Duration(minutes: 0),
+            lastActionTime: DateTime.now(),
+            creationDate: widget.selectedDate,
+          ),
         );
         Navigator.pop(context);
       },
@@ -132,6 +139,7 @@ class _AddRealTaskState extends State<AddRealTask> {
                     isScrollControlled: true,
                     showDragHandle: true,
                     builder: (context) => AddRealTask(
+                      index: widget.index,
                       template: value,
                       selectedDate: widget.selectedDate,
                     ),

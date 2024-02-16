@@ -19,7 +19,7 @@ class DBProvider {
 
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = p.join(documentsDirectory.path, "Tasks.db");
+    String path = p.join(documentsDirectory.path, "TaskScheduler.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE Task ("
@@ -29,7 +29,8 @@ class DBProvider {
           "completedPart INTEGER,"
           "status TEXT,"
           "lastActionTime INTEGER,"
-          "creationDate INTEGER"
+          "creationDate INTEGER,"
+          "orderIndex REAL"
           ")");
     });
   }
@@ -43,13 +44,12 @@ class DBProvider {
   getTasksByDate(DateTime date) async {
     var strDate = DateFormat("yyyy-MM-dd").format(date);
     final db = await database;
-    var res =
-        await db?.rawQuery("SELECT * FROM Task WHERE creationDate=?", [strDate]);
-    List<TaskReal> list = res
-            ?.map((item) => TaskReal.fromJson(item))
-            .toList()
-            .cast<TaskReal>() ??
-        [];
+    var res = await db?.rawQuery(
+        "SELECT * FROM Task WHERE creationDate=? ORDER BY orderIndex",
+        [strDate]);
+    List<TaskReal> list =
+        res?.map((item) => TaskReal.fromJson(item)).toList().cast<TaskReal>() ??
+            [];
     return list;
   }
 
@@ -63,5 +63,15 @@ class DBProvider {
     var res = await db?.update("Task", task.toJson(),
         where: "uuid = ?", whereArgs: [task.uuid]);
     return res;
+  }
+
+  deleteAllTasks() async {
+    final db = await database;
+    db?.delete("Task");
+  }
+
+  dropTable() async {
+    final db = await database;
+    db?.execute("DROP TABLE IF EXISTS Task");
   }
 }

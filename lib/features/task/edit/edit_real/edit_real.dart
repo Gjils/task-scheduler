@@ -47,7 +47,7 @@ class _EditRealTaskState extends State<EditRealTask> {
 
   @override
   Widget build(BuildContext context) {
-    final replaceTask = context.watch<AppState>().replaceTask;
+    final updateTask = context.watch<AppState>().updateTask;
     final deleteTask = context.watch<AppState>().deleteTask;
     return EditContainer(
       label: Text(
@@ -61,18 +61,10 @@ class _EditRealTaskState extends State<EditRealTask> {
         if (errorText != null) {
           return;
         }
-        replaceTask(
-          newTask: TaskReal(
-            title: controller.text,
-            duration: durationController.value,
-            status: isDone ? "done" : "not started",
-            completedPart: Duration(minutes: 0),
-            lastActionTime: DateTime.now(),
-            creationDate: DateTime.now(),
-            uuid: widget.task.uuid,
-          ),
-          oldTask: widget.task,
-        );
+        widget.task.title = controller.text;
+        widget.task.duration = durationController.value;
+        widget.task.status = isDone ? "done" : "not started";
+        updateTask(task: widget.task);
         Navigator.pop(context);
       },
       onDelete: () {

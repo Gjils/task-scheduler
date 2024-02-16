@@ -3,18 +3,8 @@ import 'package:task_scheduler/data/database.dart';
 import 'package:task_scheduler/features/task/task.dart';
 
 class AppState extends ChangeNotifier {
-  var currentDay = DateTime.now();
-
-  void changeDay(date) async {
-    currentDay = date;
+  AppState() {
     getTasksByDate();
-    notifyListeners();
-  }
-
-  void getTasksByDate() async {
-    _realTasks = await DBProvider.db.getTasksByDate(currentDay);
-
-    notifyListeners();
   }
 
   var themeIsDark = true;
@@ -24,30 +14,42 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  var currentDay = DateTime.now();
+
+  void changeDay(date) async {
+    currentDay = date;
+    notifyListeners();
+    getTasksByDate();
+  }
+
   var _realTasks = <TaskReal>[];
 
-  void addRealTask({required TaskReal task}) async {
+  void getTasksByDate() async {
+    _realTasks = await DBProvider.db.getTasksByDate(currentDay);
+    notifyListeners();
+  }
+
+  void addRealTask({required TaskReal task}) {
     _realTasks.add(task);
-    await DBProvider.db.newTask(task);
     notifyListeners();
+    DBProvider.db.newTask(task);
   }
 
-  void replaceTask(
-      {required TaskReal newTask, required TaskReal oldTask}) async {
-    print("${oldTask.uuid} ${newTask.uuid}+");
-    _realTasks[_realTasks.indexOf(oldTask)] = newTask;
-    await DBProvider.db.updateTask(newTask);
+  void updateTask({required TaskReal task}) {
+    _realTasks[_realTasks.indexOf(task)] = task;
     notifyListeners();
+    DBProvider.db.updateTask(task);
   }
 
-  void deleteTask({required task}) {
+  void deleteTask({required TaskReal task}) {
     _realTasks.remove(task);
-    DBProvider.db.deleteTask(task);
     notifyListeners();
+    DBProvider.db.deleteTask(task);
   }
 
-  void insertTask({required index, required item}) {
-    _realTasks.insert(index, item);
+  void insertTask({required task, required index}) {
+    _realTasks.remove(task);
+    _realTasks.insert(index, task);
     notifyListeners();
   }
 

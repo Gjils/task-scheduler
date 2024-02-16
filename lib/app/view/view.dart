@@ -46,7 +46,6 @@ class _TaskSchedulerAppState extends State<TaskSchedulerApp> {
     return ChangeNotifierProvider(
       create: (context) => AppState(),
       builder: (context, child) {
-        context.watch<AppState>().getTasksByDate();
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: "Task Scheduler",
@@ -56,13 +55,14 @@ class _TaskSchedulerAppState extends State<TaskSchedulerApp> {
                 ? darkColorScheme
                 : lightColorScheme,
           ),
-          home: Scaffold(
-            appBar: AppBar(title: Text(destinations[selectedIndex].title)),
-            body: destinations[selectedIndex].page,
-            bottomNavigationBar: AppNavigationBar(
-                destinations: destinations,
-                selectedIndex: selectedIndex,
-                setSelectedIndex: setSelectedIndex),
+          home: SafeArea(
+            child: Scaffold(
+              body: destinations[selectedIndex].page,
+              bottomNavigationBar: AppNavigationBar(
+                  destinations: destinations,
+                  selectedIndex: selectedIndex,
+                  setSelectedIndex: setSelectedIndex),
+            ),
           ),
         );
       },

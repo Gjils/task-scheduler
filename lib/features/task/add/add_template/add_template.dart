@@ -8,7 +8,9 @@ import '../container/container.dart';
 import 'package:task_scheduler/state/state.dart';
 
 class AddTemplate extends StatefulWidget {
-  const AddTemplate({super.key});
+  const AddTemplate({super.key, required this.index});
+
+  final double index;
 
   @override
   State<AddTemplate> createState() => _AddTemplateState();
@@ -51,7 +53,10 @@ class _AddTemplateState extends State<AddTemplate> {
         }
         addTemplate(
           task: TaskTemplate(
-              title: controller.text, duration: durationController.value),
+            index: widget.index,
+            title: controller.text,
+            duration: durationController.value,
+          ),
         );
         Navigator.pop(context);
       },

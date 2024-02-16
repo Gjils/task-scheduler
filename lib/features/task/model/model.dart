@@ -8,16 +8,22 @@ class Task {
   Task({
     required this.title,
     required this.duration,
+    required this.index,
   });
 
-  final String title;
-  final Duration duration;
+  String title;
+  Duration duration;
+  double index;
 
   String? get type => null;
 }
 
 class TaskTemplate extends Task {
-  TaskTemplate({required super.title, required super.duration, uuid}) {
+  TaskTemplate(
+      {required super.title,
+      required super.duration,
+      required super.index,
+      uuid}) {
     if (uuid != null) {
       this.uuid = uuid;
     } else {
@@ -31,22 +37,20 @@ class TaskTemplate extends Task {
   String get type => "Template";
 
   factory TaskTemplate.fromJson(Map<String, dynamic> json) => TaskTemplate(
-        title: json["title"],
-        duration: Duration(milliseconds: json["duration"]),
-        uuid: json["uuid"],
-      );
+      title: json["title"],
+      duration: Duration(milliseconds: json["duration"]),
+      uuid: json["uuid"],
+      index: json["orderIndex"]);
 
-  Map<String, dynamic> toJson() => {
-        "uuid": uuid,
-        "title": title,
-        "duration": duration,
-      };
+  Map<String, dynamic> toJson() =>
+      {"uuid": uuid, "title": title, "duration": duration, "index": index};
 }
 
 class TaskReal extends Task with ChangeNotifier {
   TaskReal({
     required super.title,
     required super.duration,
+    required super.index,
     required this.status,
     required this.completedPart,
     required this.lastActionTime,
@@ -72,6 +76,7 @@ class TaskReal extends Task with ChangeNotifier {
   String get type => "Real";
 
   factory TaskReal.fromJson(Map<String, dynamic> json) => TaskReal(
+      index: json["orderIndex"],
       title: json["title"],
       duration: Duration(seconds: json["duration"]),
       uuid: json["uuid"],
@@ -82,13 +87,13 @@ class TaskReal extends Task with ChangeNotifier {
       creationDate: DateTime.parse(json["creationDate"]));
 
   Map<String, dynamic> toJson() => {
+        "orderIndex": index,
         "uuid": uuid,
         "title": title,
         "duration": duration.inSeconds,
         "completedPart": completedPart.inSeconds,
         "status": status,
         "lastActionTime": lastActionTime.microsecondsSinceEpoch,
-        "creationDate":
-            DateFormat("yyyy-MM-dd").format(creationDate),
+        "creationDate": DateFormat("yyyy-MM-dd").format(creationDate),
       };
 }

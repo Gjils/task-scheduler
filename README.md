@@ -46,7 +46,15 @@ Templates time
 
 Daily schedule +
 
-Save data in storage
+Save data in storage 
+
+Bugs:
+
+no done in edit
+
+no reorder
+
+no templte save
 
 More settings (reset data)
 

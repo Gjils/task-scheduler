@@ -35,6 +35,33 @@ class _TimeStatusState extends State<TimeStatus> {
 
   @override
   Widget build(BuildContext context) {
+    Duration initialDuration;
+    Duration remainingDuration;
+    if (widget.task.status == "doing") {
+      initialDuration = (widget.task.completedPart +
+          DateTime.now().difference(widget.task.lastActionTime));
+      remainingDuration = widget.task.lastActionTime
+          .add(widget.task.duration - widget.task.completedPart)
+          .difference(
+            DateTime.now(),
+          );
+    } else {
+      initialDuration = widget.task.completedPart;
+      remainingDuration = widget.task.duration - widget.task.completedPart;
+    }
+    int initialDurationSeconds =
+        min(widget.task.duration.inSeconds, initialDuration.inSeconds);
+
+    initialDuration += Duration(seconds: 1);
+
+    CountDownController countDownController = CountDownController();
+    if (widget.task.status == "paused") {
+      Timer.run(
+        () {
+          countDownController.pause();
+        },
+      );
+    }
     return Container(
       height: 650,
       padding:
@@ -45,17 +72,11 @@ class _TimeStatusState extends State<TimeStatus> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircularCountDownTimer(
+            controller: countDownController,
             width: 200,
             height: 200,
             strokeWidth: 20,
-            initialDuration: min(
-                widget.task.status == "doing"
-                    ? widget.task.completedPart.inSeconds +
-                        DateTime.now()
-                            .difference(widget.task.lastActionTime)
-                            .inSeconds
-                    : widget.task.completedPart.inSeconds,
-                widget.task.duration.inSeconds),
+            initialDuration: initialDurationSeconds,
             duration: widget.task.duration.inSeconds,
             fillColor: Theme.of(context).colorScheme.onPrimaryContainer,
             ringColor: Theme.of(context).colorScheme.onTertiary,
@@ -68,9 +89,7 @@ class _TimeStatusState extends State<TimeStatus> {
           Text(
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
-            "Remaining: ${getTimeString(widget.task.status == "doing" ? widget.task.lastActionTime.add(widget.task.duration - widget.task.completedPart).difference(
-                  DateTime.now(),
-                ) : widget.task.duration - widget.task.completedPart)}\nSpent: ${getTimeString((widget.task.status == "doing" ? DateTime.now().difference(widget.task.lastActionTime) : Duration(minutes: 0)) + widget.task.completedPart)}",
+            "Remaining: ${getTimeString(remainingDuration)}\nSpent: ${getTimeString(initialDuration)}",
           ),
         ],
       ),
@@ -84,5 +103,5 @@ String getTimeString(duration) {
   int seconds = duration.inSeconds;
   minutes -= hours * 60;
   seconds -= minutes * 60 + hours * 60 * 60;
-  return "${hours == 0 ? "" : "${hours}h "}${minutes == 0 ? "" : "${minutes}m "}${seconds == 0 ? "" : "${seconds}s "}";
+  return "${hours == 0 ? "" : "${hours}h "}${minutes == 0 ? "" : "${minutes}m "} ${seconds}s";
 }

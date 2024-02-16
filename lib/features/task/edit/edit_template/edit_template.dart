@@ -61,6 +61,7 @@ class _EditTemplateState extends State<EditTemplate> {
         }
         replaceTemplate(
           newTask: TaskTemplate(
+            index: widget.template.index,
             title: controller.text,
             duration: durationController.value,
             uuid: widget.template.uuid,
