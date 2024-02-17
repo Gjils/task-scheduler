@@ -16,6 +16,9 @@ class TemplatesPage extends StatelessWidget {
       height: 80,
     ));
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Templates"),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListView(

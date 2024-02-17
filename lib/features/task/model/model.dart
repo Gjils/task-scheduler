@@ -37,13 +37,19 @@ class TaskTemplate extends Task {
   String get type => "Template";
 
   factory TaskTemplate.fromJson(Map<String, dynamic> json) => TaskTemplate(
-      title: json["title"],
-      duration: Duration(milliseconds: json["duration"]),
-      uuid: json["uuid"],
-      index: json["orderIndex"]);
+        title: json["title"],
+        duration: Duration(milliseconds: json["duration"]),
+        uuid: json["uuid"],
+        index: 1,
+        // index: json["orderIndex"],
+      );
 
-  Map<String, dynamic> toJson() =>
-      {"uuid": uuid, "title": title, "duration": duration, "index": index};
+  Map<String, dynamic> toJson() => {
+        "uuid": uuid,
+        "title": title,
+        "duration": duration.inSeconds,
+        // "index": index,
+      };
 }
 
 class TaskReal extends Task with ChangeNotifier {

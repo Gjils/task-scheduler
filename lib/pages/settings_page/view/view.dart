@@ -9,15 +9,20 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeIsDark = context.watch<AppState>().themeIsDark;
     var setTheme = context.watch<AppState>().setTheme;
-    return ListView(
-      children: [
-        SwitchListTile(
-          value: themeIsDark,
-          onChanged: setTheme,
-          title: Text("Dark Theme"),
-          secondary: Icon(Icons.dark_mode_outlined),
-        )
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Settings"),
+      ),
+      body: ListView(
+        children: [
+          SwitchListTile(
+            value: themeIsDark,
+            onChanged: setTheme,
+            title: Text("Dark Theme"),
+            secondary: Icon(Icons.dark_mode_outlined),
+          )
+        ],
+      ),
     );
   }
 }

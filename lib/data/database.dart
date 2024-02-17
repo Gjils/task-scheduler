@@ -19,7 +19,7 @@ class DBProvider {
 
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = p.join(documentsDirectory.path, "TaskScheduler.db");
+    String path = p.join(documentsDirectory.path, "TaskDB.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE Task ("
@@ -31,6 +31,11 @@ class DBProvider {
           "lastActionTime INTEGER,"
           "creationDate INTEGER,"
           "orderIndex REAL"
+          ")");
+      await db.execute("CREATE TABLE Template ("
+          "uuid TEXT PRIMARY KEY,"
+          "title TEXT,"
+          "duration INTEGER"
           ")");
     });
   }
@@ -65,13 +70,32 @@ class DBProvider {
     return res;
   }
 
-  deleteAllTasks() async {
+  newTemplate(TaskTemplate newTemplate) async {
     final db = await database;
-    db?.delete("Task");
+    var res = await db?.insert("Template", newTemplate.toJson());
+    return res;
   }
 
-  dropTable() async {
+  getTemplates() async {
     final db = await database;
-    db?.execute("DROP TABLE IF EXISTS Task");
+    var res = await db?.rawQuery("SELECT * FROM Tempalte");
+    List<TaskTemplate> list = res
+            ?.map((item) => TaskTemplate.fromJson(item))
+            .toList()
+            .cast<TaskTemplate>() ??
+        [];
+    return list;
+  }
+
+  deleteTemplate(TaskTemplate template) async {
+    final db = await database;
+    db?.delete("Template", where: "uuid = ?", whereArgs: [template.uuid]);
+  }
+
+  updateTemplate(TaskTemplate template) async {
+    final db = await database;
+    var res = await db?.update("Template", template.toJson(),
+        where: "uuid = ?", whereArgs: [template.uuid]);
+    return res;
   }
 }

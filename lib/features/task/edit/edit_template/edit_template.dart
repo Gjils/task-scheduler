@@ -44,7 +44,7 @@ class _EditTemplateState extends State<EditTemplate> {
 
   @override
   Widget build(BuildContext context) {
-    final replaceTemplate = context.watch<AppState>().replaceTemplate;
+    final replaceTemplate = context.watch<AppState>().updateTemplate;
     final deleteTemplate = context.watch<AppState>().deleteTemplate;
 
     return EditContainer(
@@ -59,15 +59,9 @@ class _EditTemplateState extends State<EditTemplate> {
         if (errorText != null) {
           return;
         }
-        replaceTemplate(
-          newTask: TaskTemplate(
-            index: widget.template.index,
-            title: controller.text,
-            duration: durationController.value,
-            uuid: widget.template.uuid,
-          ),
-          oldTask: widget.template,
-        );
+        widget.template.duration = durationController.value;
+        widget.template.title = controller.text;
+        replaceTemplate(task: widget.template);
         Navigator.pop(context);
       },
       onDelete: () {

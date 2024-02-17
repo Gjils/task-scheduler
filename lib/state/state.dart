@@ -60,17 +60,20 @@ class AppState extends ChangeNotifier {
   void addTemplate({required TaskTemplate task}) {
     _templates.add(task);
     notifyListeners();
+    DBProvider.db.newTemplate(task);
   }
 
-  void replaceTemplate(
-      {required TaskTemplate newTask, required TaskTemplate oldTask}) {
-    _templates[_templates.indexOf(oldTask)] = newTask;
+  void updateTemplate(
+      {required TaskTemplate task}) {
+    _templates[_templates.indexOf(task)] = task;
     notifyListeners();
+    DBProvider.db.updateTemplate(task);
   }
 
   void deleteTemplate({required TaskTemplate task}) {
     _templates.remove(task);
     notifyListeners();
+    DBProvider.db.deleteTemplate(task);
   }
 
   List<TaskTemplate> get templates => _templates;

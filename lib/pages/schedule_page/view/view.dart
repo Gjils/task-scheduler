@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
 import 'package:weekly_calendar/weekly_calendar.dart';
 
 import 'package:task_scheduler/features/task/task.dart';
@@ -31,7 +32,7 @@ class _SchedulePageState extends State<SchedulePage> {
     tasksWidgets.add(SizedBox(height: 80, key: Key("sized-box")));
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 130,
+        toolbarHeight: 155,
         flexibleSpace: Column(
           children: [
             SizedBox(
